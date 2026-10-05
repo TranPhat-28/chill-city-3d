@@ -1,0 +1,244 @@
+/* ── Reset & Base ────────────────────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #0a0a1a;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui,
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Canvas ──────────────────────────────────────────────────────────── */
+#app {
+  display: block;
+  width: 100vw;
+  height: 100vh;
+  outline: none;
+}
+
+/* ── Loading Screen ──────────────────────────────────────────────────── */
+#loader {
+  position: fixed;
+  inset: 0;
+  background: #0a0a1a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+  transition: opacity 0.7s ease;
+}
+
+#loader.fade-out {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.loader-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+}
+
+.loader-title {
+  font-size: 3rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: #ffffff;
+  text-shadow: 0 0 60px rgba(100, 200, 255, 0.5);
+}
+
+.progress-track {
+  width: 260px;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+#progress-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #4fc3f7, #81d4fa);
+  border-radius: 2px;
+  transition: width 0.3s ease;
+}
+
+#loader-status {
+  font-size: 0.78rem;
+  color: #555;
+  letter-spacing: 0.06em;
+}
+
+/* ── Settings Toggle Button ──────────────────────────────────────────── */
+#settings-toggle {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  z-index: 100;
+  width: 42px;
+  height: 42px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 10px;
+  background: rgba(10, 10, 26, 0.72);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: #c8c8d8;
+  font-size: 1.1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s, transform 0.15s, border-color 0.2s;
+  line-height: 1;
+}
+
+#settings-toggle:hover {
+  background: rgba(30, 30, 60, 0.88);
+  border-color: rgba(255, 255, 255, 0.22);
+  transform: scale(1.06);
+}
+
+#settings-toggle:active {
+  transform: scale(0.97);
+}
+
+/* ── Settings Panel ──────────────────────────────────────────────────── */
+#settings-panel {
+  position: fixed;
+  top: 68px;
+  right: 16px;
+  z-index: 100;
+  width: 284px;
+  background: rgba(10, 10, 26, 0.84);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #e0e0e0;
+  padding: 18px 20px;
+  transform-origin: top right;
+  transition: opacity 0.22s ease, transform 0.22s ease;
+  user-select: none;
+}
+
+#settings-panel.hidden {
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(0.94) translateY(-4px);
+}
+
+/* Settings panel internal elements */
+.settings-heading {
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  color: #606080;
+  text-transform: uppercase;
+  margin-bottom: 18px;
+}
+
+.settings-section {
+  margin-bottom: 20px;
+}
+
+.settings-section:last-child {
+  margin-bottom: 0;
+}
+
+.settings-label {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: #9090b0;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Divider between sections */
+.settings-divider {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.06);
+  margin: 14px 0;
+}
+
+/* ── Settings Controls (used in Phase 7) ─────────────────────────────── */
+
+/* Dropdown select */
+.settings-select {
+  width: 100%;
+  padding: 8px 10px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  color: #e0e0e0;
+  font-size: 0.82rem;
+  cursor: pointer;
+  outline: none;
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23888' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  padding-right: 28px;
+  transition: border-color 0.2s, background-color 0.2s;
+}
+
+.settings-select:hover,
+.settings-select:focus {
+  border-color: rgba(255, 255, 255, 0.22);
+  background-color: rgba(255, 255, 255, 0.09);
+}
+
+.settings-select option {
+  background: #1a1a2e;
+  color: #e0e0e0;
+}
+
+/* Button group (e.g. season selector) */
+.settings-btn-group {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+}
+
+.settings-btn {
+  padding: 7px 6px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  color: #9090b0;
+  font-size: 0.78rem;
+  cursor: pointer;
+  text-align: center;
+  transition: background 0.18s, color 0.18s, border-color 0.18s;
+}
+
+.settings-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #d0d0e8;
+}
+
+.settings-btn.active {
+  background: rgba(79, 195, 247, 0.18);
+  border-color: rgba(79, 195, 247, 0.5);
+  color: #81d4fa;
+}
+
+/* Placeholder text for unimplemented sections */
+.settings-placeholder {
+  font-size: 0.75rem;
+  color: #404060;
+  font-style: italic;
+}

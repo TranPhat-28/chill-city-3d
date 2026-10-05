@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ChillCity 3D</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <!-- Three.js renders into this canvas -->
+    <canvas id="app"></canvas>
+
+    <!-- ── Loading Screen ───────────────────────────────────────────────── -->
+    <div id="loader">
+      <div class="loader-content">
+        <h1 class="loader-title">ChillCity</h1>
+        <div class="progress-track">
+          <div id="progress-fill"></div>
+        </div>
+        <p id="loader-status">Initializing…</p>
+      </div>
+    </div>
+
+    <!-- ── Settings UI ───────────────────────────────────────────────────── -->
+    <button id="settings-toggle" title="Settings">⚙</button>
+    <div id="settings-panel" class="hidden"></div>
+
+    <!-- Entry point -->
+    <script type="module" src="src/main.js"></script>
+  </body>
+</html>
