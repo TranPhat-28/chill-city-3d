@@ -3,6 +3,10 @@ import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
 import * as THREE from 'three';
 
 export const ASSET_MANIFEST: Record<string, string> = {
+  'road.crosswalk': '/assets/models/roads/road-crosswalk.glb',
+  'road.straight': '/assets/models/roads/road-straight.glb',
+  'road.turn': '/assets/models/roads/road-turn.glb',
+  'road.t': '/assets/models/roads/road-t.glb',
   // Add entries like:
   // 'building.residential.house_01': '/assets/models/buildings/residential/house_01.glb',
 };

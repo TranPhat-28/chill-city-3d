@@ -3,7 +3,7 @@ import * as THREE from 'three';
 // ── Core ──────────────────────────────────────────────────────────────────
 import { engine }      from './core/Engine';
 import { assetLoader } from './core/AssetLoader';
-import { Grid }        from './core/Grid';
+import { Grid, GRID_UNIT } from './core/Grid';
 
 // ── Controls & UI ─────────────────────────────────────────────────────────
 import { CameraController } from './controls/CameraController';
@@ -129,6 +129,28 @@ function buildPhase1TestScene() {
 
   const grid = new Grid(60);
   scene.add(grid);
+
+  const crosswalk = assetLoader.get('road.crosswalk');
+  if (crosswalk) {
+    const centerCellX = Math.floor(grid.size / 2) - 1;
+    const centerCellZ = Math.floor(grid.size / 2) - 1;
+    const centerPosition = grid.cellToWorld(centerCellX, centerCellZ);
+
+    const box = new THREE.Box3().setFromObject(crosswalk);
+    const size = box.getSize(new THREE.Vector3());
+    const maxDimension = Math.max(size.x, size.y, size.z);
+    const fitScale = GRID_UNIT / maxDimension;
+
+    crosswalk.scale.setScalar(fitScale);
+    crosswalk.position.set(centerPosition.x, 0.5, centerPosition.z);
+    crosswalk.traverse((child) => {
+      if ((child as THREE.Mesh).isMesh) {
+        child.castShadow = true;
+        child.receiveShadow = true;
+      }
+    });
+    scene.add(crosswalk);
+  }
 
   const originMarker = new THREE.Mesh(
     new THREE.SphereGeometry(2.5, 16, 16),
