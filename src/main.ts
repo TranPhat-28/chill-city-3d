@@ -3,6 +3,7 @@ import * as THREE from 'three';
 // ── Core ──────────────────────────────────────────────────────────────────
 import { engine }      from './core/Engine';
 import { assetLoader } from './core/AssetLoader';
+import { Grid }        from './core/Grid';
 
 // ── Controls & UI ─────────────────────────────────────────────────────────
 import { CameraController } from './controls/CameraController';
@@ -126,17 +127,16 @@ function buildPhase1TestScene() {
   ground.receiveShadow = true;
   scene.add(ground);
 
-  const grid = new THREE.GridHelper(1200, 60, 0x000000, 0x2a2a2a);
-  grid.position.y = 0.2;
+  const grid = new Grid(60);
   scene.add(grid);
 
-  const cubeGeo = new THREE.BoxGeometry(20, 20, 20);
-  const cubeMat = new THREE.MeshStandardMaterial({ color: 0xe74c3c, roughness: 0.6 });
-  const cube = new THREE.Mesh(cubeGeo, cubeMat);
-  cube.position.set(0, 10, 0);
-  cube.castShadow = true;
-  cube.receiveShadow = true;
-  scene.add(cube);
+  const originMarker = new THREE.Mesh(
+    new THREE.SphereGeometry(2.5, 16, 16),
+    new THREE.MeshStandardMaterial({ color: 0xff0000, emissive: 0x220000 })
+  );
+  originMarker.position.set(0, 2, 0);
+  scene.add(originMarker);
+
 }
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
