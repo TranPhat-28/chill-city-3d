@@ -6,41 +6,25 @@ import * as THREE from 'three';
  * The central hub of ChillCity 3D. Owns the Three.js renderer, scene,
  * camera, and the main animation loop. Every other system registers an
  * update callback here instead of running its own RAF.
- *
- * Usage:
- *   engine.init(canvasElement);
- *   engine.onUpdate((delta) => mySystem.update(delta));
- *   engine.start();
- *
- * All other modules receive `engine` as a reference and interact with
- * `engine.scene` to add/remove objects.
  */
 class Engine {
+  public scene: THREE.Scene;
+  public clock: THREE.Clock;
+  public renderer: THREE.WebGLRenderer | null = null;
+  public camera: THREE.PerspectiveCamera | null = null;
+  
+  private _updateCallbacks: Array<(delta: number) => void> = [];
+  private _running: boolean = false;
+
   constructor() {
-    /** @type {THREE.Scene} */
     this.scene = new THREE.Scene();
-
-    /** @type {THREE.Clock} */
     this.clock = new THREE.Clock();
-
-    /** @type {THREE.WebGLRenderer | null} */
-    this.renderer = null;
-
-    /** @type {THREE.PerspectiveCamera | null} */
-    this.camera = null;
-
-    /** @type {Array<function(delta: number): void>} */
-    this._updateCallbacks = [];
-
-    this._running = false;
   }
 
   /**
    * Initialize the renderer and camera. Must be called before start().
-   * @param {HTMLCanvasElement} canvasEl
-   * @returns {Engine} this (for chaining)
    */
-  init(canvasEl) {
+  init(canvasEl: HTMLCanvasElement): this {
     // ── Renderer ─────────────────────────────────────────────────────────
     this.renderer = new THREE.WebGLRenderer({
       canvas: canvasEl,
@@ -81,19 +65,16 @@ class Engine {
   /**
    * Register a callback to be invoked every animation frame.
    * The callback receives `delta` — time in seconds since the last frame.
-   * @param {function(delta: number): void} callback
-   * @returns {Engine} this (for chaining)
    */
-  onUpdate(callback) {
+  onUpdate(callback: (delta: number) => void): this {
     this._updateCallbacks.push(callback);
     return this;
   }
 
   /**
    * Begin the render loop. Safe to call only once.
-   * @returns {Engine} this (for chaining)
    */
-  start() {
+  start(): this {
     if (this._running) return this;
     this._running = true;
     this.clock.start();
@@ -101,8 +82,7 @@ class Engine {
     return this;
   }
 
-  /** @private — main RAF loop */
-  _tick() {
+  private _tick(): void {
     requestAnimationFrame(this._tick.bind(this));
 
     const delta = this.clock.getDelta();
@@ -111,11 +91,14 @@ class Engine {
       cb(delta);
     }
 
-    this.renderer.render(this.scene, this.camera);
+    if (this.renderer && this.camera) {
+      this.renderer.render(this.scene, this.camera);
+    }
   }
 
-  /** @private */
-  _onResize() {
+  private _onResize(): void {
+    if (!this.camera || !this.renderer) return;
+    
     const w = window.innerWidth;
     const h = window.innerHeight;
     this.camera.aspect = w / h;
@@ -124,6 +107,4 @@ class Engine {
   }
 }
 
-// ── Singleton export ──────────────────────────────────────────────────────
-// A single Engine instance is shared across the entire app.
 export const engine = new Engine();
